@@ -1,6 +1,6 @@
 
 
-\documentclass[accentcolor=tud9c,9.5pt,nochapname,bigchapter,paper=a5report]{tudreport}
+\documentclass[accentcolor=tud4c,9.5pt,nochapname,bigchapter,paper=a5report]{tudreport}
 
 
 \usepackage{mathtools}
@@ -15,6 +15,13 @@
 \DeclareMathSizes{9.5}{9.5}{7}{7}
 \DeclareMathSizes{10}{10}{7}{7}
 \DeclareMathSizes{11}{11}{8}{8}
+
+\usepackage{array}
+\newcolumntype{+}{>{\global\let\currentrowstyle\relax}}
+\newcolumntype{^}{>{\currentrowstyle}}
+\newcommand{\rowstyle}[1]{\gdef\currentrowstyle{#1}%
+#1\ignorespaces
+}
 \begin{document}
 
 \def\Var{{\rm Var}\,}
@@ -59,15 +66,15 @@ where T is the sampling interval that should fulfil the Nyquist condition $\Omeg
 To process a continous-time signal $x_c(t)$ with digital signal processing techniques, the following setup is used:\\
 \includegraphics[width=\textwidth]{images/dsp_setup.png}
 
-\chapter{Filter Design}
-\section{Digital Filters}
+\chapter{Digital Filter Design}
+
 Let $x(n)$ and $y(n) , n=0\pm 1,\ldots$ be the input and the output of the system.  
 Linear time-invariant discrete-time systems can be characterized 
  by linear constant coefficient difference equations of the following type, where $\max(N-1,M)$ is the order:
  \begin {equation}
  \sum\limits_{k=0}^{M}a_ky(n-k)= \sum\limits_{r=0}^{N-1} b_r x(n-r)
  \end{equation}
-\subsection{Finite Impulse Response (FIR) filter}
+\section{Finite Impulse Response (FIR) filter}
 If $M=0$ then the impulse response of the filter is finite so that:
 \begin{subequations}
 \begin{align}
@@ -80,14 +87,14 @@ b_n/a_n, &n=0,\ldots,N-1\\
 \end{align}
 \end{subequations}
 
-\subsection{Linear Phase Filters}
+\section{Linear Phase Filters}
 A digital filter can be described as linear phase filter if $H\freq$ can be expressed as:
 \begin{equation}
 	H\freq = H_M\freq e^{-j\omega \alpha}
 \end{equation} 
 with $H_M\freq$ real and $\alpha$(group delay) constant 
 
-\subsubsection{Generalized linear phase system} \label{genLPS}
+\subsection{Generalized linear phase system} \label{genLPS}
 A Linear phase system with:
 \begin{equation}
 	H\freq = H_M\freq e^{-j\omega \alpha + j\beta}
@@ -97,7 +104,7 @@ has to meet the condition:
 	\sum\limits_{n=-\infty}^{\infty} h(n)\sin[\omega (n-\alpha )+\beta] = 0 \forall \omega \in \mathbb{R}
 \end{equation}
 
-\subsection {Linear Phase FIR Filters}
+\section {Linear Phase FIR filters}
 Applying the condition for generalized linear phase systems (\ref{genLPS}) to the FIR Filters yields two possible causal FIR Systems:
 \begin{subequations}
 \begin{align}
@@ -119,7 +126,7 @@ H\freq &= H_o\freq e^{-j\omega (N-1)/2+j\pi /2}
 \end{align}
 \end{subequations}
 
-\subsection {FIR Filter Types}
+\section {Linear Phase FIR filter Types}
 The linear phase FIR filters have been classified into 4 Types:
 
 \begin{itemize}
@@ -129,7 +136,7 @@ The linear phase FIR filters have been classified into 4 Types:
   \item {\bf Type IV}\quad antisymmetric impulse response and N is even
 \end{itemize}
 
-\subsubsection {Type I linear phase filter}
+\subsection {Type I FIR linear phase filter}
 $N$ is odd and the impuls response is symmetric. $\beta=0$ 
 \begin{subequations}
 \begin{align}
@@ -140,7 +147,7 @@ $N$ is odd and the impuls response is symmetric. $\beta=0$
 \end{align}
 \end{subequations}
 
-\subsubsection {Type II linear phase filter}
+\subsection {Type II FIR linear phase filter}
 $N$ is even and the impuls response is symmetric. $\beta=0$ 
 \begin{subequations}
 \begin{align}
@@ -151,7 +158,7 @@ $N$ is even and the impuls response is symmetric. $\beta=0$
 \end{align}
 \end{subequations}
 
-\subsubsection {Type III linear phase filter}
+\subsection {Type III FIR linear phase filter}
 $N$ is odd and the impuls response is antisymmetric. $\beta=\pi/2$ 
 \begin{subequations}
 \begin{align}
@@ -162,7 +169,7 @@ $N$ is odd and the impuls response is antisymmetric. $\beta=\pi/2$
 \end{align}
 \end{subequations}
 
-\subsubsection {Type IV linear phase filter}
+\subsection {Type IV FIR linear phase filter}
 $N$ is even and the impuls response is antisymmetric. $\beta=\pi/2$ 
 \begin{subequations}
 \begin{align}
@@ -172,6 +179,42 @@ $N$ is even and the impuls response is antisymmetric. $\beta=\pi/2$
 	d(k)&=2h[N/2-k], \quad\quad k=1,2,\ldots,N/2 \notag
 \end{align}
 \end{subequations}
+
+\section{FIR filter design}
+\subsection{FIR filter type choice}
+Not every FIR filter type fits on every filter. \\
+\begin{tabular}{|+c|^c|^c|^c|^c|}
+\hline
+\rowstyle{\bfseries}
+
+ Type & Low Pass & High Pass & Band Pass & Band Stop  \\ \hline
+ I 	    & 			 &		      &			 & \\ \hline
+ II 	& 			 &Not suitable&			 &Not suitable\\ \hline
+ III 	&Not suitable&Not suitable&			 &Not suitable \\ \hline
+ IV 	&Not suitable&		      &			 &Not suitable\\ \hline
+
+\end{tabular}
+\subsection{FIR filter design by Windowing}
+Most idealized systems are non causal and have infinite impulse responses. To achieve finite impulse responses
+and causality, truncating the ideal response is the most straightforward approach. 
+\section{Infinite Impulse Response (IIR) filter}
+IIR filters are systems, which follow the following Restrictions:\\
+$h(n)$ is
+  \begin{itemize}
+  	\item real
+  	\item causal
+  	\item satifies stability
+  \end{itemize}
+$h(n)$ possesses a rational z-transform with $a_0=1$, i.e.
+\begin{equation}
+  	H(z)=\frac{\sum\limits_{k=0}^{N-1} b_k z^{-k}}{1-\sum\limits_{k=0}^{N-1} a_k z^{-k}}
+  \end{equation}
+\subsection{Properties of IIR filters}
+\begin{itemize}
+  \item {\bf Stability}\\ All poles of $H(z)$ must lie inside the unit disk
+  \item {\bf Linear Phase}\\ IIR filters do not have linear phase. Only the magnitude response is specified.
+\end{itemize}
+
 
 \section {Filter Specficaion}
 Non-ideal Filters have one or more pass-bands($\omega_p$), 
