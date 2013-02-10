@@ -26,7 +26,7 @@
 
 \def\Var{{\rm Var}\,}
 \def\E{{\rm E}\,}
-\def\freq{{(e^{j\omega})}\,}
+\def\freq{{\left(e^{j\omega}\right)}\,}
 
 
 \title{Digital Signal Processing}
@@ -45,8 +45,8 @@
 This formulary is based on the formulary of the course Stochastic Signals and Systems,
  which can be found here \url{https://github.com/Tyde/stosigsysfs/blob/master/document.pdf?raw=true}.
 If you find any errors or have any ideas for improvement, mail me at studium@daniel-thiem.de
- or file an issue at !GITHUBLINK. The \LaTeX{}  source code is
-online on !GITHUBLINK and can be improved and extended.
+ or file an issue at \url{https://github.com/Tyde/dspformulary/issues}. The \LaTeX{}  source code is
+online on \url{https://github.com/Tyde/dspformulary} and can be improved and extended.
 
 \chapter{Digital Processing of Continous-Time Signals}
 \section{Periodic Sampling}
@@ -196,7 +196,100 @@ Not every FIR filter type fits on every filter. \\
 \end{tabular}
 \subsection{FIR filter design by Windowing}
 Most idealized systems are non causal and have infinite impulse responses. To achieve finite impulse responses
-and causality, truncating the ideal response is the most straightforward approach. 
+and causality, truncating the ideal response is the most straightforward approach. \\
+For the ideal impulse response 
+\begin{equation}
+h_d(n) = \frac{1}{2\pi}\int\limits_{-\pi}^{\pi} H_d\freq e^{j\omega n} d\omega
+\end{equation}
+the truncated response would be
+\begin{subequations}
+\begin{align}
+h(n)&=\begin{cases}
+h_d(n) &,0\leq n \leq N-1\\
+0		&\text{, otherwise}
+\end{cases} \\
+\text{or}& \notag \\
+h(n)&=h_d(n) \cdot w(n) \\
+\text{with}& \notag \\
+w(n) &= \begin{cases}
+1 &,0\leq n \leq N-1\\
+0		&\text{, otherwise}
+\end{cases}\notag
+\end{align}
+\end{subequations}
+\subsubsection{Properties of a rectangular Window}
+If the window-funciton is a rectangle, the frequency response of the filter has to be multiplied with the 
+fourier transform of the rectangle:
+\begin{subequations}
+\begin{align}
+H\freq &= H_d\freq \circledast W\freq \\
+&= H_d\freq \circledast \left[e^{-j\omega \frac{N-1}{2} } \cdot \frac{\sin(\omega N /2)}{\omega /2}\right]
+\end{align}
+\end{subequations}
+This, if $H_d\freq$ should be closest to $H\freq$, $N$ has to go to infinity
+
+\subsubsection{Main and Sidelobes}
+With increasing $N$, the 'main-lobe' width increases. \\
+\includegraphics[width=\textwidth]{images/main_side_lobes.png}
+
+\subsubsection{Peak approxomation error (PAE)}
+\begin{equation}
+ PAE =\gamma \cdot \max\limits_{\omega \in \mathbb{R}} \left|H_d\freq - H\freq\right|
+\end{equation}
+The PAE is also directly related to the maximum allowable specification tolerance.
+With $\omega_c$ as the discontinuity of $H_d\freq$: 
+\begin{equation}
+\Delta H_d\left(e^{j\omega_c}\right) \cdot \gamma \leq \min(\alpha_1,\alpha_2)
+\end{equation}
+
+\subsubsection{Commonly used Windows}
+\begin{subequations}
+\begin{align}
+\text{Rectangular} \notag \\
+w(n) &= \begin{cases}
+1 &,0\leq n \leq N-1\\
+0		&\text{, otherwise}
+\end{cases}\\
+\text{Barlett} \notag \\
+w(n) &= \begin{cases}
+\frac{2n}{N-1} &,0\leq n \leq \frac{N-1}{2}\\
+2-\frac{2n}{N-1}		&,\frac{N-1}{2}\leq n\leq N-1
+\end{cases}\\
+\text{Hanning} \notag \\
+w(n)& = \frac{1}{2}\left[1-\cos\left(\frac{2\pi n}{N-1}\right)\right] \quad 0\leq n \leq N-1\\
+\text{Hamming} \notag \\
+w(n)& = 0.54-0.46\cos\left(\frac{2\pi n}{N-1}\right) \quad 0\leq n \leq N-1 \\
+\text{Blackman} \notag \\
+w(n)& = 0.42-0.5\cos\left(\frac{2\pi n}{N-1}\right)+0.08\cos\left(\frac{4\pi n}{N-1}\right) \quad 0\leq n \leq N-1
+\end{align}
+\end{subequations}
+These windows have different Properties: \\
+\includegraphics[width=\textwidth]{images/window_props.png}
+
+
+\subsection{Kaiser Window Filter Design}
+The Kaiser window function adapts to the specifications. Let $\alpha = \frac{N-1}{2}$ and $I_0$ be the zeroth
+order modified Bessel function of the first kind:
+\begin{equation}
+w(n)=\begin{cases}
+\frac{I_0\left\{\beta\left[1-\left(\frac{n-\alpha}{\alpha}\right)^2\right]^{\frac{1}{2}}\right\}}{I_0(\beta)} &,0\leq n\leq N-1\\
+0 &,\text{otherwise}
+\end{cases}
+\end{equation}
+
+\subsubsection{Desgin a filter with Kaiser window}
+Assuming $\alpha_1 = \alpha_2$ and the transition region is $\Delta\omega = \omega_s-\omega_p$. With $A = -20\log_{10}\alpha_1$
+\begin{equation}
+\beta = \begin{cases}
+0.1102(A-8.7) &A>50 \\
+0.5842(A-21)^{0.4}+0.07866(A-21) &21\leq A \leq 50 \\
+0 &A<21
+\end{cases}
+\end{equation}
+and
+\begin{equation}
+N=\left[\frac{A-8}{2.285\Delta\omega}+1\right]
+\end{equation}
 \section{Infinite Impulse Response (IIR) filter}
 IIR filters are systems, which follow the following Restrictions:\\
 $h(n)$ is
@@ -209,6 +302,8 @@ $h(n)$ possesses a rational z-transform with $a_0=1$, i.e.
 \begin{equation}
   	H(z)=\frac{\sum\limits_{k=0}^{N-1} b_k z^{-k}}{1-\sum\limits_{k=0}^{N-1} a_k z^{-k}}
   \end{equation}
+  
+ 
 \subsection{Properties of IIR filters}
 \begin{itemize}
   \item {\bf Stability}\\ All poles of $H(z)$ must lie inside the unit disk
