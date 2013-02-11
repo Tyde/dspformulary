@@ -31,7 +31,7 @@
 
 \title{Digital Signal Processing}
 \subtitle{Formulary}
-\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.1 - 10.02.2013}
+\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.3 - 11.02.2013}
 
 \maketitle
 \newpage
@@ -290,6 +290,18 @@ and
 \begin{equation}
 N=\left[\frac{A-8}{2.285\Delta\omega}+1\right]
 \end{equation}
+\subsubsection{Integrated Square Error}
+To optimize a windowed filter, one has to attempt to minimize the integrated squared error
+\begin{equation}
+\epsilon^2=\frac{1}{2\pi}\int\limits_{-\pi}^{\pi}\left|H_d\freq - H\freq\right|^2 d\omega
+\end{equation}
+
+\subsection{Optimal Filter Design}
+Optimal filter design does not use the integrated square error but instead the maximum error, which occurs at the discontinuities of $H_d\freq$.
+This error gets distributed equally across the frequency band.
+Please use the script pages 33-36 for information about optimal filter design.
+,
+
 \section{Infinite Impulse Response (IIR) filter}
 IIR filters are systems, which follow the following Restrictions:\\
 $h(n)$ is
@@ -301,7 +313,7 @@ $h(n)$ is
 $h(n)$ possesses a rational z-transform with $a_0=1$, i.e.
 \begin{equation}
   	H(z)=\frac{\sum\limits_{k=0}^{N-1} b_k z^{-k}}{1-\sum\limits_{k=0}^{N-1} a_k z^{-k}}
-  \end{equation}
+\end{equation}
   
  
 \subsection{Properties of IIR filters}
@@ -310,6 +322,81 @@ $h(n)$ possesses a rational z-transform with $a_0=1$, i.e.
   \item {\bf Linear Phase}\\ IIR filters do not have linear phase. Only the magnitude response is specified.
 \end{itemize}
 
+\subsection{IIR filter design from an analog or continous-time filter}
+Steps to design:
+\begin{itemize}
+  \item {\bf Step 1}: Specification of the digital filter
+  \item {\bf Step 2}: Translation to a continuous-time filter specification
+  \item {\bf Step 3}: Determination of the continuous-time filter system function $H_c(s)$
+  \item {\bf Step 4}: Transformation of $H_c(s)$ to a digital filter system function $H(z)$
+\end{itemize}
+\subsubsection{Step 1}
+Filter parameters like $\alpha_1,\alpha_2,\omega_p,\omega_s$ and $\T_d$ have to be set.
+\subsubsection{Step 2}
+If a Filter $H_c(\Omega)$ is given, applying the relation $\Omega=\omega/T_d$ leads to the continuous-time filter specifications, where $T_d$ 
+is the design sampling interval. Then the filter has to be checked to fulfil the Specifications given in Step 1
+
+\subsubsection{Step 4}
+Steps for the transformation of $H_c(s)$ to $H(z)$
+\begin{enumerate}
+  \item From $H_c(s)$ and $H_c(j\Omega)$, we determin $h_c(t)$
+  \item Optain the digital sequence by $h(n)=T_d\cdot h_c(nT_d)$ where $T_d$ is the design sampling interval
+  \item $H(z)$ is obtained from $h(n)$
+\end{enumerate}
+
+\subsection{Bilinear Transformation}
+The bilinear transformation is used to map the imaginary axis of the $s$-plane to the unit circle.
+Now let
+\begin{subequations}
+\begin{equation}
+s=\frac{2}{T_d}\left[\frac{1-z^{-1}}{1+z^{-1}}\right]
+\end{equation}
+which leads to
+\begin{equation}
+H(z) = H_c\left[\frac{2}{T_d}\left(\frac{1-z^{-1}}{1+z^{-1}}\right)\right]
+\end{equation}
+with $z=e^{j\omega}$:
+\begin{equation}
+s=\frac{2}{T_d}\left[\frac{1-e^{-j\omega}}{1+e^{-j\omega}}\right]=j\frac{2}{T_d}\tan(\omega/2)
+\end{equation}
+with $s=\sigma + j\Omega$ follows:
+\begin{equation}
+\Omega=\frac{2}{T_d}\tan(\omega/2) \text{ and } \sigma = 0
+\end{equation}
+\end{subequations}
+
+\subsubsection{Remarks on the bilinear transformation}
+\begin{itemize}
+  \item The frequency deformation $\Omega=\frac{2}{T_d}\tan(\omega/2)$ comes to a deviation in the detailed shape of $H_c(j\Omega)$
+  \item The delay time is also modified: $\tau_d=\tau_c[1+((\omega_c T_d)/2)^2]$
+  \item The bilinear transformation has no aliasing problems.
+  \item This transformation is the most used in practise
+\end{itemize}
+
+\subsection{Implementation of IIR Filters}
+The output of the filter can be described as
+\begin{equation}
+y(n) = \sum\limits_{k=1}^{M}a_k y(n-k)+\sum\limits_{r=0}^{N-1}b_r x(n-r)
+\end{equation}
+\subsubsection{Direct Form I}
+A Signal flow graph can be seen at Figure 5.8 on page 47 in the DSP script.
+\begin{equation}
+H(z)=H_2(z)H_1(z)=\left(\frac{1}{\sum\limits_{k=1}^{M}a_k z^{-k}}\right)\left(\sum\limits_{r=0}^{N-1}b_rz^{-r}\right)
+\end{equation}
+\subsubsection{Direct Form II}
+The direct form II can change the order of $H_1(z)$ and $H_2(z)$. A Signal flow graph can be seen at Figure 5.9 on page 48 in the DSP script.
+\begin{equation}
+H_1(z)H_2(z)=H(z)=H_2(z)H_1(z)
+\end{equation}
+\subsubsection{Cascade Form}
+A Signal flow graph can be seen at Figure 5.10 on page 48 in the DSP script.
+\begin{subequations}
+\begin{align}
+H(z)&=\frac{\sum\limits_{r=0}^{N-1}b_rz^{-r}}{1-\sum\limits_{k=1}^{M}a_k z^{-k}}=A\prod\limits_k H_k(z)\\
+\text{with} \notag\\
+H_k(z)&=\frac{1+\beta_{1k}z^{-1}+\beta_{2k}z^{-2}}{1-\alpha_{1k}z^{-1}-\alpha_{2k}z^{-2}}
+\end{align}
+\end{subequations}
 
 \section {Filter Specficaion}
 Non-ideal Filters have one or more pass-bands($\omega_p$), 
@@ -317,7 +404,78 @@ transition-bands(between $\omega_p$ and $\omega_s$) and stop-bands($\omega_s$).
 For the pass- and the stop- band, a tolerance
 $\alpha_i$ has to be specified. Therefore a low-pass filter would have the following specification:
 \includegraphics[width=\textwidth]{images/filter_spec.png}
+\chapter{Random Variables and Stochastic Processes}
+This is a revision of the Stochastic Signals and Systems course, which has an own Formulary which can be found at:
+\url{https://github.com/Tyde/stosigsysfs/blob/master/document.pdf?raw=true}
+\chapter{The Finite Fourier Transform}
+\section{Definition}
+Let $x(0),\ldots,x(N-1)$ be realisiations of a stationary random process $X(n),n=0,1,2,\ldots,N-1$
+\begin{equation}
+X_N\freq = \sum\limits_{n=0}^{N-1}X(n)e^{-j\omega n}, \quad -\infty < \omega \infty 
+\end{equation} 
+and inverse:
+\begin{equation}
+X(n)=\frac{1}{2\pi}\int\limits_{-\pi}^{\pi}X_N\freq e^{j\omega n}d\omega, \quad n=0,1,\ldots,N-1
+\end{equation}
 
+\subsection{Properties}
+\begin{itemize}
+  \item {\bf Periodicity} $X_N\left(e^{j(\omega +k2\pi}\right)=X_N\freq\quad\forall k \in \mathbb{N}$
+  \item {\bf Symmetry} $X_N\left(e^{-j\omega}\right)=X_N\freq^{*}\quad \forall X(n) \in \mathbb{R}$
+  \item {\bf Linearity} $\mathcal{F}\{aX(n)+bY(n)\} = aX_N\freq + bY_N\freq$
+\end{itemize}
+\subsection{Discrete Finite Fourier Transform}
+With $\omega_k=2\pi k/N, k=0,\ldots,N-1$
+\begin{equation}
+X_N(e^{j\frac{2\pi k}{N}})=\sum\limits_{n=0}^{N-1}X(n)e^{-j2\pi kn/N} \quad,k=0,1,\ldots,N-1
+\end{equation}
+
+\subsection{Statistical Properties}
+\subsubsection{White Gaussian Process}
+Let $X(0),\ldots,X(N-1)$ be real valued random variables with $X(n)\sim\mathcal{N}(0,1)$ and $N=2^r$ with $r \in \mathbb{N}$
+Then:
+\begin{subequations}
+\begin{align}
+\mathfrak{Re}\left\{X_N(e^{j2\pi k/N})\right\} = \sum\limits_{n=0}^{N-1} X(N)\cos(2\pi kn/N)\\
+\mathfrak{Im}\left\{X_N(e^{j2\pi k/N})\right\} = -\sum\limits_{n=0}^{N-1} X(N)\sin(2\pi kn/N)
+\end{align}
+The Mean and Variance can be determined to:
+\begin{align}
+\begin{bmatrix}
+\mathfrak{Re}\left\{X_N(e^{j2\pi k/N})\right\}\\
+\mathfrak{Im}\left\{X_N(e^{j2\pi k/N})\right\}\\
+\end{bmatrix} \sim \mathcal{N}\left( \begin{bmatrix}0\\0\end{bmatrix}, \frac{N}{2}
+\begin{bmatrix}1&0\\0&1\end{bmatrix}\right)
+\end{align}
+\end{subequations}
+
+\subsubsection{Real Stationary Random Process}
+If the process has an arbitray $\mu_x,c_{XX}(\kappa)$ and $C_{XX}\freq$ for $N\rightarrow\infty$ the asymptotic distribution is:
+\begin{subequations}
+\begin{equation}
+\begin{bmatrix}
+\mathfrak{Re}\left\{X_N\freq\right\}\\
+\mathfrak{Im}\left\{X_N\freq\right\}\\
+\end{bmatrix} \sim \mathcal{N}\left( \begin{bmatrix}0\\0\end{bmatrix}, \frac{N}{2}C_{XX}\freq
+\begin{bmatrix}1&0\\0&1\end{bmatrix}\right) \quad \omega \in (0,\pi)
+\end{equation}
+For $\omega = 0$ and $\omega = \pi$ The Finite Fourier Transform is purely real:
+\begin{equation}
+\mathfrak{Re}\left\{X_N\freq\right\} \sim \mathcal{N} \left(N\mu_x\delta(\omega),NC_{XX}\freq\right)
+\end{equation} 
+For fixed frequencies $0 \leq \omega_{(1)} < \ldots < \omega_{(M)} \leq \pi$ the random variables
+$X_N(e^{j\omega_{(1)}}),X_N(e^{j\omega_{(2)}}),\ldots,X_N(e^{j\omega_{(M)}})$ are asomptotically for $N\rightarrow\infty$
+{\bf indepently distributed}
+\end{subequations}
+\subsection{Segmentation of the Finite Fourier Transform}
+Division of random process $X(n), n=0,\ldots,N-1$ into L segments of length M with $N=ML$ will yield a finite fourier transform
+for each segment $l$ which has the same asymptotic distribution as for the non-segmented process 
+\begin{equation}
+X_M(e^{j\omega},l)=\sum\limits_{n=0}^{M-1}X(n-(l-1)M)e^{-j\omega n}, \quad l=1,\ldots,L
+\end{equation}
+The random variables $X_M(e^{j\omega},l)$ arre for $l=1,\ldots,L$ asymptotically as $N\rightarrow\infty$ indepently distributed
+
+\subsection{Windowing of the process}
 
 \chapter{Miscellaneous}
 \section{Useful mathematical equations}
