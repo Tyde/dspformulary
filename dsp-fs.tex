@@ -331,7 +331,7 @@ Steps to design:
   \item {\bf Step 4}: Transformation of $H_c(s)$ to a digital filter system function $H(z)$
 \end{itemize}
 \subsubsection{Step 1}
-Filter parameters like $\alpha_1,\alpha_2,\omega_p,\omega_s$ and $\T_d$ have to be set.
+Filter parameters like $\alpha_1,\alpha_2,\omega_p,\omega_s$ and $T_d$ have to be set.
 \subsubsection{Step 2}
 If a Filter $H_c(\Omega)$ is given, applying the relation $\Omega=\omega/T_d$ leads to the continuous-time filter specifications, where $T_d$ 
 is the design sampling interval. Then the filter has to be checked to fulfil the Specifications given in Step 1
@@ -424,14 +424,14 @@ X(n)=\frac{1}{2\pi}\int\limits_{-\pi}^{\pi}X_N\freq e^{j\omega n}d\omega, \quad 
   \item {\bf Symmetry} $X_N\left(e^{-j\omega}\right)=X_N\freq^{*}\quad \forall X(n) \in \mathbb{R}$
   \item {\bf Linearity} $\mathcal{F}\{aX(n)+bY(n)\} = aX_N\freq + bY_N\freq$
 \end{itemize}
-\subsection{Discrete Finite Fourier Transform}
+\section{Discrete Finite Fourier Transform}
 With $\omega_k=2\pi k/N, k=0,\ldots,N-1$
 \begin{equation}
 X_N(e^{j\frac{2\pi k}{N}})=\sum\limits_{n=0}^{N-1}X(n)e^{-j2\pi kn/N} \quad,k=0,1,\ldots,N-1
 \end{equation}
 
-\subsection{Statistical Properties}
-\subsubsection{White Gaussian Process}
+\section{Statistical Properties}
+\subsection{White Gaussian Process}
 Let $X(0),\ldots,X(N-1)$ be real valued random variables with $X(n)\sim\mathcal{N}(0,1)$ and $N=2^r$ with $r \in \mathbb{N}$
 Then:
 \begin{subequations}
@@ -449,7 +449,7 @@ The Mean and Variance can be determined to:
 \end{align}
 \end{subequations}
 
-\subsubsection{Real Stationary Random Process}
+\subsection{Real Stationary Random Process}
 If the process has an arbitray $\mu_x,c_{XX}(\kappa)$ and $C_{XX}\freq$ for $N\rightarrow\infty$ the asymptotic distribution is:
 \begin{subequations}
 \begin{equation}
@@ -467,7 +467,7 @@ For fixed frequencies $0 \leq \omega_{(1)} < \ldots < \omega_{(M)} \leq \pi$ the
 $X_N(e^{j\omega_{(1)}}),X_N(e^{j\omega_{(2)}}),\ldots,X_N(e^{j\omega_{(M)}})$ are asomptotically for $N\rightarrow\infty$
 {\bf indepently distributed}
 \end{subequations}
-\subsection{Segmentation of the Finite Fourier Transform}
+\section{Segmentation of the Finite Fourier Transform}
 Division of random process $X(n), n=0,\ldots,N-1$ into L segments of length M with $N=ML$ will yield a finite fourier transform
 for each segment $l$ which has the same asymptotic distribution as for the non-segmented process 
 \begin{equation}
@@ -475,7 +475,88 @@ X_M(e^{j\omega},l)=\sum\limits_{n=0}^{M-1}X(n-(l-1)M)e^{-j\omega n}, \quad l=1,\
 \end{equation}
 The random variables $X_M(e^{j\omega},l)$ arre for $l=1,\ldots,L$ asymptotically as $N\rightarrow\infty$ indepently distributed
 
-\subsection{Windowing of the process}
+\section{Windowing of the process}
+Let $w(n)=0$ for $n=0,\ldots,N-1$ be a window that is applied to the random process.
+\begin{equation}
+X_{n,\omega} \freq=\sum\limits_{n=0}^{N-1} w(n)X(n)e^{-j\omega n}
+\end{equation}
+The window has the effect that the variance is multiplied by the factor $\sum_{n=0}^{N-1}w(n)^2$
+and the mean at $\omega=0$ is multiplied by the factor $\sum_{n=0}^{N-1} w(n)$
+
+\subsection{Power of the windowed process}
+The average power of $X(n)$ is defined by
+\begin{equation}
+P_{XX}=\lim\limits_{N\rightarrow\infty}\frac{1}{N}\sum\limits_{n=0}^{N-1}\E\left[X(n)^2\right] =
+\lim\limits_{N\rightarrow\infty}\frac{1}{2\pi}\int\limits_{-\pi}^{\pi}\frac{1}{N}\E\left[\left|X_N\freq\right|^2\right] d\omega
+\end{equation}
+
+\chapter{Digital Spectral Analysis}
+\section{Consitency and Mean Square Error in terms of bias and variance}
+The MSE can be rewirtten as follows:
+\begin{equation}
+\text{MSE}(\hat{\mu}_X)=\Var \left[\hat{\mu}_X\right] + \text{bias}(\hat{\mu}_X)^2
+\end{equation}
+The Estimator $\hat{\mu}_X$ is called consisten if:
+\begin{equation}
+\lim\limits_{N\rightarrow\infty} \text{MSE}(\hat{\mu}_X) = 0
+\end{equation}
+\section{Mean Estimation}
+The mean of $X(0),\ldots ,X(N-1)$ which are ech distributed as $\mathcal{N}(\mu_X,\sigma_X^2)$, can be estimated by:
+\begin{equation}
+\hat{{\mu}}_x=\frac{1}{n}\sum\limits_{n=0}^{N-1}X(n)
+\end{equation}
+
+\section{The Periodogram}
+A candiate estimator for $C_{XX}\freq$ is the periodogram:
+\begin{equation}
+I_{XX}^{N}\freq = \frac{1}{N}\left|X_N\freq\right|^2 = \frac{1}{N}\left|\sum\limits_{n=0}^{N-1} X(n) e^{-j\omega n}\right|^2
+\end{equation}
+\subsection{Distribution of the Periodogram}
+The periodogram for data values $X(N)$ is indepently distributed as:
+\begin{equation}
+I_{XX}^{N} \sim \begin{cases}
+\frac{C_{XX}\freq}{2}\chi_2^2 &,\omega \neq \pi k \\
+C_{XX}\freq\chi_1^2 &,\omega = \pi k \\
+\end{cases}
+\end{equation}
+
+\subsection{Mean of the Periodogram}
+With the use of (\ref{geomconv})
+\begin{subequations}
+\begin{align}
+\E\left[I_{XX}^{N}\freq\right] &= \frac{\left|\Delta^N\freq\right|}{N} \circledast C_{XX}\freq 
++\frac{\left|\Delta^N\freq\right|}{N} \cdot \left|\mu_x\right|^2 \\
+\text{where} \notag \\
+\Delta^N\freq &= \sum\limits_{n=0}^{N-1}e^{-j\omega n} = e ^{-j \omega \frac{N-1}{2}} \cdot \frac{\sin(\frac{\omega N}{2})}{\sin(\frac{\omega}{2})}
+\end{align}
+\end{subequations}
+Thus for a zero mean stationary process $X(n),\E\left[I_{XX}^{N}\freq\right]$ for $N\rightarrow\infty$
+\begin{subequations}
+\begin{align}
+\lim\limits_{N\rightarrow\infty} \E\left[I_{XX}^{N}\right] &= C_{XX}\freq \quad \omega \neq 2k\pi \\
+\lim\limits_{N\rightarrow\infty} \E\left[I_{X-\mu_x,X-\mu_x}^{N}\right] &= C_{XX}\freq \quad \forall\omega
+\end{align}
+\end{subequations}
+
+\subsection{Variance of the Periodogram}
+Let $X(n)$ be a real white Gaussian Process with $\sigma^2$ and $\omega,\lambda \neq 0$
+\begin{equation}
+\Var\left[I_{XX}\freq\right] \approx C_{XX}\freq^2 \cdot \frac{1}{N^2}(|\Delta^N(e^{j2\omega})|^2+N^2)
+\end{equation}
+Therefore the Periodogram is not a consistent estimator
+
+\subsection{Averaging Periodograms (Barlett's method)}
+To improve the consistency of the Periodogram, it is 
+possible to average the estimates of multiple independent measurements. With $X_l(n)=X(n+(l-1)\cdot M)$ and $n=0,\ldots,M-1$
+\begin{equation}
+I_{XX}^M(e^{j\omega},l)=\frac{1}{M}\left|\sum\limits_{n=0}^{M-1} X_l(n) e^{-j\omega n}\right|^2 \quad = 1,\ldots,L
+\end{equation}
+And estimate with:
+\begin{equation}
+\hat{C}_{XX}^B\freq = \frac{1}{L}\sum\limits_{l=1}^{L} I_{XX}^M (e^{j\omega},l)
+\end{equation}
+{\bf The variance of Barlett's estimator decreases when L increases}
+\subsection{Welch's method}
 
 \chapter{Miscellaneous}
 \section{Useful mathematical equations}
@@ -484,7 +565,7 @@ The random variables $X_M(e^{j\omega},l)$ arre for $l=1,\ldots,L$ asymptotically
 \sum\limits_{n=0}^{N-1} q^n = \frac{1-q^N}{1-q} \quad \text{for} \quad|q|<1
 \end{equation} 
 
-\subsection{Conversion from Geometric series to trigonometric fraction}
+\subsection{Conversion from Geometric series to trigonometric fraction} \label{geomconv}
 Let $\frac{1-q^{N}}{1-q}$ be with $q = e^{-j\omega}$
 \begin{equation}
 \frac{1-e^{-jN\omega}}{1-e^{-j\omega}} = e^{-j\omega \frac{N-1}{2}}\frac{\sin\left(\frac{N}{2}\omega\right)}{\sin\left(\frac{\omega}{2}\right)}
