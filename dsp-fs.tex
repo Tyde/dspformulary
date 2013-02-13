@@ -331,7 +331,7 @@ $h(n)$ possesses a rational z-transform with $a_0=1$, i.e.
   \item {\bf Linear Phase}\\ IIR filters do not have linear phase. Only the magnitude response is specified.
 \end{itemize}
 
-\subsection{IIR filter design from an analog or continous-time filter}
+\subsection{IIR filter design from an analog or continuous-time filter (Impulse Invariance Method)}
 Steps to design:
 \begin{itemize}
   \item {\bf Step 1}: Specification of the digital filter
@@ -348,7 +348,7 @@ is the design sampling interval. Then the filter has to be checked to fulfil the
 \subsubsection{Step 4}
 Steps for the transformation of $H_c(s)$ to $H(z)$
 \begin{enumerate}
-  \item From $H_c(s)$ and $H_c(j\Omega)$, we determin $h_c(t)$
+  \item From $H_c(s)$ and $H_c(j\Omega)$, we determine $h_c(t)$
   \item Optain the digital sequence by $h(n)=T_d\cdot h_c(nT_d)$ where $T_d$ is the design sampling interval
   \item $H(z)$ is obtained from $h(n)$
 \end{enumerate}
@@ -648,12 +648,13 @@ Now for $N\rightarrow\infty$ the bias is $C_{YX}\freq$ and the variace is $\frac
 \end{subequations}
 
 \chapter{Parametric Spectrum Estimation}
+\section{Auto-regressive (AR) Processes}
 With 
 \begin{equation}
 C_XX\freq = \frac{\sigma_Z^2}{\left|1+\sum_{k=1}^p a_k e^{-k\omega k} \right|^2}
 \end{equation}
 The objective is to estimate the parameter $a_1,\ldots,a_p$ which will be used to estimate the spectrum $C_{XX}\freq$
-\section{Yule-Walker Equations}
+\subsection{Yule-Walker Equations}
 \begin{equation}
 c_{XX}(l)+ \sum\limits_{k=1}^p a_kc_{xx}(l-k)=\begin{cases}
 \sigma_Z^2 &,l=0\\
@@ -662,18 +663,18 @@ c_{XX}(l)+ \sum\limits_{k=1}^p a_kc_{xx}(l-k)=\begin{cases}
 \end{equation}
 Using $\hat{c}_{XX}(0),\ldots,\hat{c}_{XX}(p)$ leads to a unique solution for $a_1,\ldots,a_p$
 
-\section{extended Yule-Walker equations}
+\subsection{extended Yule-Walker equations}
 $Z(n)$ and $V(n)$ are uncorrelated white noise processes with variances $\sigma^2_Z$ and $\sigma_V^2$. With the
 differencee equation of the system $Y(n)+aY(n-1)=Z(n)+V(n)+aV(n-1)$
 \begin{equation}
 c_{YY}(l)+\sum\limits_{k=1}^p a_kc_{YY}(l-k) =\begin{cases}
 \sigma_Z^2+\sigma_V^2 &,l=0 \\
 a_l\sigma_V^2 &,l=1,\ldots,p\\
-0 &,l>p
+0 &,l>p 
 \end{cases}
 \end{equation}
 
-\section{Moving Average Process}
+\section{Moving Average (MA) Process}
 Consider a transversal filter $h(n)$ with input real-valued $Z(n)$ and real-valued output $X(n)$
 \begin{equation}
 X(n)=\sum\limits_{k=0}^q h(k)Z(n-k)
