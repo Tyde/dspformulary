@@ -557,13 +557,155 @@ And estimate with:
 \end{equation}
 {\bf The variance of Barlett's estimator decreases when L increases}
 \subsection{Welch's method}
+Welch's method is similar to Barlett's method but the data segments are multiplied by a window $w_M(n)$ of length
+$M$ and the segmens may overlap. With $X_l(n)=X(n+(l-1)\cdot D)$
+\begin{subequations}
+\begin{align}
+\hat{C}_{XX}^W\freq &= \frac{1}{L}\sum\limits_{l=1}^L I_{WX,WX}^M (e^{j\omega},l) \\
+\text{and} \notag \\
+I_{WX,WX}^M(e^{j\omega},l)&= \frac{1}{MA}\left|\sum\limits_{n=0}^{M-1} w_M(n) \cdot X_l(n) e^^ {-j\omega n}\right|^2
+\end{align}
+Where $A$ is a factor to ge an asymptotic unbiased estimation, which can be found using Parseval's theorem:
+\begin{equation}
+\frac{1}{2\pi}\int\limits_{-\pi}^{\pi} \left| W_M(e^{j\lambda}) \right|^2 d\lambda = \sum\limits_{n=0}^{M-1}\left|w_M(n)\right|^2 =MA
+\end{equation}
+\end{subequations}
+\subsection{Smoothing the Periodogram}
+With $\omega_k\neq\omega_l$, thus $X_N(e^{j\omega_k})$ and $X_N(e^{j\omega_l})$ are asymptotically independent and 
+$I_{XX}^N(e^{j\omega_k})$ and $I_{XX}^N(e^{j\omega_l})$ are also independent:
+\begin{equation}
+\hat{C}_{XX}^S\freq = \frac{1}{2m+1}\sum\limits_{k=-m}^m I_{XX}^N(e^{j2\pi(k(\omega)+k)/N})
+\end{equation}
 
+
+\subsection{Generall Class of Spectral Estimates}
+Wit $A=\frac{1}{2m+1}\sum_{k=-m}^m W_k$ a generall class of estimators can be defined analogusly to the smoothed periodogram
+\begin{equation}
+\hat{C}_{XX}^{SW}\freq = \frac{1}{(2m+1)A}\sum\limits_{k=-m}^m W_kI_{XX}^N(e^{j2\pi(k(\omega)+k)/N})
+\end{equation}
+
+\section{The Log-Spectrum}
+Estimating $10\log C_{XX}\freq$ from $10\log \hat{C}_{XX}\freq$ instead of the spectrum
+\section{The Blackman-Tuckey Method}
+This Mehthod estimates the sample covariance function and windows it with $w_{2M-1}(\kappa)$
+\begin{subequations}
+\begin{align}
+w_{2M-1}(\kappa) &= \begin{cases}
+w_{2M-1}(-\kappa) &,\text{for } |\kappa|\leq M-1 ,\text{with } M\ll N\\
+0 &,\text{otherwise}\end{cases}\\
+\hat{C}_{XX}^{BT}\freq &= \sum\limits_{\kappa=-M+1}^{M-1} \hat{c}_{XX}(\kappa )\cdot w_{2M-1}(\kappa)\cdot e^{-j\omega\kappa}\\
+\text{This is the same as} \notag\\
+\hat{C}_{XX}^{BT}\freq &= \frac{1}{2\pi} \int\limits_{-\pi}^\pi I_{X-\bar{X},X-\bar{X}}^N(e^{j\lambda})\cdot W_{2M-1}\left(e^{j(\omega-\lambda}\right)d\lambda\\
+\text{This has the following}&\text{ constraint for the window:} \notag\\
+W_{2M-1}\freq &\geq 0 \quad\quad \forall \omega
+\end{align}
+\end{subequations}
+The Blackman-Tukey estimator is unbiased for $N\rightarrow\infty$ and its variance tends to zero if the window function has finite energy.
+\section{Cross-Spectrum Estimation}
+\subsection{The Cross-Periodogram}
+For $X(0),\ldots ,X(N-1),Y(0),\ldots,Y(N-1)$ the objective is to estimate the cross-spectrum $C_{YX}\freq$ for $-\pi <\omega <\pi$
+\begin{equation}
+I_{YX}^N\freq=\frac{1}{N}Y_N\freq X_N\freq^{*}
+\end{equation}
+This has the bias $C_{YX}\freq$ and the variance $C_{YY}\freq C_{XX}\freq$
+\subsection{Segmented Cross-Periodogram}
+For different Segments $l=1,\ldots,L$ with length $M$
+\begin{subequations}
+\begin{align}
+\hat{C}_{YX}^B\freq &= \frac{1}{L}\sum\limits_{l=1}^L \frac{1}{M} Y_M(e^{j\omega},l)X_M(e^{j\omega},l)^{*} \\
+\text{with}\notag \\
+Y_N(e^{j\omega},l) &= \sum\limits_{n=0}^{M-1} Y(n-(l-1)M)e^{j\omega n}\\
+X_N(e^{j\omega},l) &= \sum\limits_{n=0}^{M-1} X(n-(l-1)M)e^{j\omega n}
+\end{align}
+Now for $N\rightarrow\infty$ the bias is $C_{YX}\freq$ and the variace is $\frac{1}{L}C_{YY}\freq C_{XX}\freq$
+\end{subequations}
+
+\chapter{Parametric Spectrum Estimation}
+With 
+\begin{equation}
+C_XX\freq = \frac{\sigma_Z^2}{\left|1+\sum_{k=1}^p a_k e^{-k\omega k} \right|^2}
+\end{equation}
+The objective is to estimate the parameter $a_1,\ldots,a_p$ which will be used to estimate the spectrum $C_{XX}\freq$
+\section{Yule-Walker Equations}
+\begin{equation}
+c_{XX}(l)+ \sum\limits_{k=1}^p a_kc_{xx}(l-k)=\begin{cases}
+\sigma_Z^2 &,l=0\\
+0 &,l=1,\ldots,p
+\end{cases}
+\end{equation}
+Using $\hat{c}_{XX}(0),\ldots,\hat{c}_{XX}(p)$ leads to a unique solution for $a_1,\ldots,a_p$
+
+\section{extended Yule-Walker equations}
+$Z(n)$ and $V(n)$ are uncorrelated white noise processes with variances $\sigma^2_Z$ and $\sigma_V^2$. With the
+differencee equation of the system $Y(n)+aY(n-1)=Z(n)+V(n)+aV(n-1)$
+\begin{equation}
+c_{YY}(l)+\sum\limits_{k=1}^p a_kc_{YY}(l-k) =\begin{cases}
+\sigma_Z^2+\sigma_V^2 &,l=0 \\
+a_l\sigma_V^2 &,l=1,\ldots,p\\
+0 &,l>p
+\end{cases}
+\end{equation}
+
+\section{Moving Average Process}
+Consider a transversal filter $h(n)$ with input real-valued $Z(n)$ and real-valued output $X(n)$
+\begin{equation}
+X(n)=\sum\limits_{k=0}^q h(k)Z(n-k)
+\end{equation} 
+If $Z(n)$ is a white noise process, $X(n)$ is a {\bf Moving average (MA) process} with
+\begin{equation}
+C_{XX}=\left|H\freq\right|^2C_{ZZ}\freq =\left|H\freq\right|^2\sigma_Z^2 
+\end{equation}
+With $b(m)=\sigma_Z h(m)$ and $m=0,\ldots,q$ and $h(0)=1$ we get
+\begin{align}
+c_{XX}(l)&=\sum\limits_{m=0}^{q-|l|} b(m)b(m+|l|) \quad \text{for } 0\leq |l| \leq q\\
+\text{and}\\
+C_{XX} &= B\freq B(e^{-j\omega})
+\end{align}
+\subsection{Solving} \label{solv}
+\begin{enumerate}
+  \item substitue $e^{j\omega}$
+  \item Calculate $P(z)=z^qC_{XX}(z)$
+  \item Assign all roots $z_i$ of $P(z)$ inside the unit circle to $B(z)$ \\
+  		$B(z)=b(0)\prod_{i=1}^q(1-z_iz^-1)$ with $b(0)>0$ and $|z_i|\leq 1$
+  \item Calculate $h(m)=b(m)/b(0)$ for $m=1,\ldots,q$\\ 
+		With $b(0)^2=\sigma_Z^2=\frac{c_{XX}(0)}{1+\sum_{m=1}^q h(m)^2}$ and replacing $c_{XX}(l)$ with $\hat{c}_{XX}(l)$ 
+\end{enumerate}
+The Spectrum can be obtained by the relationship
+\begin{equation}
+\hat{C}_{XX}\freq = \left|\sum\limits_{n=0}^q \hat{b}(n)e^{-j\omega n} \right|^2
+\end{equation}
+
+\section{Auto-regressive Moving Average (ARMA) Process}
+The difference equation of an ARMA process, called $ARMA(p,q)$, is given by
+\begin{equation}
+X(n)+\sum\limits_{k=1}^p a_kX(n-k) = Z(n)+\sum\limits_{k=1}^q b_kz(n-k)
+\end{equation}
+The modified Yule-Walker equations can be found:
+\begin{equation}
+c_{XX}(l)+\sum\limits_{k=1}^p a_k c_{XX}(l-k) = \begin{cases}
+\sigma_Z^2\sum_k=l^q b_kh(k-l) &,l=0,\ldots,q\\\
+0&,l>q
+\end{cases}
+\end{equation}
+To solve for $a_1,\ldots,a_p$, the equations can be employed with $l=q+1,\ldots,q+p$. Then to determine $b_1,\ldots,b_q$ , $l=1,\ldots,q$ are used with (\ref{solv})
+
+\section{Model order selection}
+\subsection{Akaine's Information Criterion (AIC)}
+\begin{equation}
+\text{AIC}(m)=\log \sigma_{Z,m}^2 + m\frac{2}{N} \quad m=1,\ldots,M
+\end{equation}
+\subsection{Minimum Description Length (MDL)}
+\begin{equation}
+\text{MDL}(m)=\log \sigma_{Z,m}^2 + m\frac{\log N}{N} \quad m=1,\ldots,M
+\end{equation}
 \chapter{Miscellaneous}
 \section{Useful mathematical equations}
 \subsection{Geometric series}
 \begin{equation}
 \sum\limits_{n=0}^{N-1} q^n = \frac{1-q^N}{1-q} \quad \text{for} \quad|q|<1
 \end{equation} 
+
+
 
 \subsection{Conversion from Geometric series to trigonometric fraction} \label{geomconv}
 Let $\frac{1-q^{N}}{1-q}$ be with $q = e^{-j\omega}$
