@@ -31,7 +31,7 @@
 
 \title{Digital Signal Processing}
 \subtitle{Formulary}
-\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.5 - 13.02.2013}
+\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.5.2 - 13.02.2013}
 
 \maketitle
 \newpage
@@ -86,6 +86,13 @@ b_n/a_n, &n=0,\ldots,N-1\\
 \end{cases}
 \end{align}
 \end{subequations}
+\subsection{Properties of Filters}
+With $f_{SR}$ being the sample rate.
+\begin{align}
+\text{Filter Order}&=N-1\\
+\Delta\omega &= \frac{f_s-f_p}{f_SR} 2\pi\\
+\text{Delay} &=\frac{N-1}{2}
+\end{align}
 
 \section{Linear Phase Filters}
 A digital filter can be described as linear phase filter if $H\freq$ can be expressed as:
@@ -228,6 +235,7 @@ H\freq &= H_d\freq \circledast W\freq \\
 \end{subequations}
 This, if $H_d\freq$ should be closest to $H\freq$, $N$ has to go to infinity
 
+
 \subsubsection{Main and Sidelobes}
 With increasing $N$, the 'main-lobe' width increases. \\
 \includegraphics[width=\textwidth]{images/main_side_lobes.png}
@@ -241,6 +249,7 @@ With $\omega_c$ as the discontinuity of $H_d\freq$:
 \begin{equation}
 \Delta H_d\left(e^{j\omega_c}\right) \cdot \gamma \leq \min(\alpha_1,\alpha_2)
 \end{equation}
+
 
 \subsubsection{Commonly used Windows}
 \begin{subequations}
@@ -278,7 +287,7 @@ w(n)=\begin{cases}
 \end{equation}
 
 \subsubsection{Desgin a filter with Kaiser window}
-Assuming $\alpha_1 = \alpha_2$ and the transition region is $\Delta\omega = \omega_s-\omega_p$. With $A = -20\log_{10}\alpha_1$
+Assuming the transition region is $\Delta\omega = \omega_s-\omega_p$. With $A = -20\log_{10}\min(\alpha_1,\alpha_2)$
 \begin{equation}
 \beta = \begin{cases}
 0.1102(A-8.7) &A>50 \\
@@ -343,7 +352,11 @@ Steps for the transformation of $H_c(s)$ to $H(z)$
   \item Optain the digital sequence by $h(n)=T_d\cdot h_c(nT_d)$ where $T_d$ is the design sampling interval
   \item $H(z)$ is obtained from $h(n)$
 \end{enumerate}
-
+\subsection{The Butterworth filter}
+With $\Omega_c$ being the $3\text{dB}$ cut-off frequency
+\begin{equation}
+\left|H\freq\right|^2=\frac{1}{1+\left(\frac{\Omega}{\Omega_c}\right)}
+\end{equation}
 \subsection{Bilinear Transformation}
 The bilinear transformation is used to map the imaginary axis of the $s$-plane to the unit circle.
 Now let
@@ -404,6 +417,20 @@ transition-bands(between $\omega_p$ and $\omega_s$) and stop-bands($\omega_s$).
 For the pass- and the stop- band, a tolerance
 $\alpha_i$ has to be specified. Therefore a low-pass filter would have the following specification:
 \includegraphics[width=\textwidth]{images/filter_spec.png}
+
+\subsection{Ripple and Attenuation calculation}
+Given the pass-band attenuation $\text{ATT}_P$ and the stop-band attenuation $\text{ATT}_S$
+\begin{subequations}
+\begin{align}
+\alpha_1&=1-10^{-\text{ATT}_P/20}\\
+\alpha_2&=10^{-\text{ATT}_S/20}
+\end{align}
+Given the pass-band ripple $\text{R}_P$ and the stop-band ripple $\text{R}_S$
+\begin{align}
+\alpha_1&=10^{\text{R}_P/20}-1 \\
+\alpha_2&=10^{-\text{R}_S/20}
+\end{align}
+\end{subequations}
 \chapter{Random Variables and Stochastic Processes}
 This is a revision of the Stochastic Signals and Systems course, which has an own Formulary which can be found at:
 \url{https://github.com/Tyde/stosigsysfs/blob/master/document.pdf?raw=true}
