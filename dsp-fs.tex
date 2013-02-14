@@ -31,7 +31,7 @@
 
 \title{Digital Signal Processing}
 \subtitle{Formulary}
-\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.6.3 - 14.02.2013}
+\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.6.4 - 14.02.2013}
 
 \maketitle
 \newpage
@@ -369,6 +369,7 @@ With the conditions $\left|H(j\Omega)\right|\geq 1-\alpha_1$ for $0\leq|\Omega|\
 N&=\frac{\log\left(\frac{1}{\alpha_2}-1\right)+\log\left(\frac{1}{1-\alpha_1}+1\right)}{2(\log\left(\Omega_S\right)-\log\left(\Omega_P\right))}\\
 \Omega_c&=\sqrt[2N]{\frac{\Omega_S^{2N}}{1/\hat{\alpha}_2^2-1}}
 \end{align}
+
 \end{subequations}
 \subsection{Bilinear Transformation}
 The bilinear transformation is used to map the imaginary axis of the $s$-plane to the unit circle.
@@ -399,6 +400,11 @@ with $s=\sigma + j\Omega$ follows:
   \item This transformation is the most used in practise
 \end{itemize}
 
+\subsubsection{Conversion from continuous-time to system function}
+Let $\Omega_c$ be the cutoff-frequency and $s_k=\Omega_c \cdot e^{j\frac{\pi}{2N}(2k+N+1)}$ for $k=0,\ldots,N-1$ be the poles of the function. Take those who are on the left half plane and:
+\begin{equation}
+H(s)=\prod\limits_{k=0}^{N-1} \frac{\Omega_C^N}{s-s_k}
+\end{equation}  
 \subsection{Implementation of IIR Filters}
 The output of the filter can be described as
 \begin{equation}
