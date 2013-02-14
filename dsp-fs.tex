@@ -31,7 +31,7 @@
 
 \title{Digital Signal Processing}
 \subtitle{Formulary}
-\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.5.2 - 13.02.2013}
+\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.5.3 - 14.02.2013}
 
 \maketitle
 \newpage
@@ -740,4 +740,11 @@ Let $\frac{1-q^{N}}{1-q}$ be with $q = e^{-j\omega}$
 \begin{equation}
 \frac{1-e^{-jN\omega}}{1-e^{-j\omega}} = e^{-j\omega \frac{N-1}{2}}\frac{\sin\left(\frac{N}{2}\omega\right)}{\sin\left(\frac{\omega}{2}\right)}
 \end{equation}
+
+\subsection{Modulation Theorem}
+Let $\mathcal{F}\left\{f(x)\right\}=F\freq$ be the fourier transform, then:
+\begin{equation}
+\mathcal{F}\left\{\cos(2\pi k_0 x)f(x)\right\} = \frac{1}{2}\left[F(k-k_0)+F(k+k_0)\right]
+\end{equation}
 \end{document}
+
