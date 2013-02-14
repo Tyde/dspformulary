@@ -31,7 +31,7 @@
 
 \title{Digital Signal Processing}
 \subtitle{Formulary}
-\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.6.2 - 14.02.2013}
+\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.6.3 - 14.02.2013}
 
 \maketitle
 \newpage
@@ -363,6 +363,13 @@ With $\Omega_c$ being the $3\text{dB}$ cut-off frequency
 \begin{equation}
 \left|H(j\Omega)\right|^2=\frac{1}{1+\left(\frac{\Omega}{\Omega_c}\right)^{2N}}
 \end{equation}
+With the conditions $\left|H(j\Omega)\right|\geq 1-\alpha_1$ for $0\leq|\Omega|\leq\Omega_p$ and $\left|H(j\Omega)\right| \leq \alpha_2$ for $\Omega_s\leq|\Omega|$ 
+\begin{subequations}
+\begin{align}
+N&=\frac{\log\left(\frac{1}{\alpha_2}-1\right)+\log\left(\frac{1}{1-\alpha_1}+1\right)}{2(\log\left(\Omega_S\right)-\log\left(\Omega_P\right))}\\
+\Omega_c&=\sqrt[4]{\frac{\Omega_S^4}{1/\hat{\alpha}_2^2-1}}
+\end{align}
+\end{subequations}
 \subsection{Bilinear Transformation}
 The bilinear transformation is used to map the imaginary axis of the $s$-plane to the unit circle.
 Now let
