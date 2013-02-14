@@ -31,7 +31,7 @@
 
 \title{Digital Signal Processing}
 \subtitle{Formulary}
-\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.6.1 - 14.02.2013}
+\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.6.2 - 14.02.2013}
 
 \maketitle
 \newpage
@@ -284,7 +284,7 @@ These windows have different Properties: \\
 
 \subsection{Kaiser Window Filter Design}
 The Kaiser window function adapts to the specifications. Let $\alpha = \frac{N-1}{2}$ and $I_0$ be the zeroth
-order modified Bessel function of the first kind:
+order modified Bessel function of the first kind, while $\beta$ is a shape parameter:
 \begin{equation}
 w(n)=\begin{cases}
 \frac{I_0\left\{\beta\left[1-\left(\frac{n-\alpha}{\alpha}\right)^2\right]^{\frac{1}{2}}\right\}}{I_0(\beta)} &,0\leq n\leq N-1\\
