@@ -31,7 +31,7 @@
 
 \title{Digital Signal Processing}
 \subtitle{Formulary}
-\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.6.0 - 14.02.2013}
+\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.6.1 - 14.02.2013}
 
 \maketitle
 \newpage
@@ -188,6 +188,12 @@ $N$ is even and the impuls response is antisymmetric. $\beta=\pi/2$
 \end{subequations}
 
 \section{FIR filter design}
+\subsection{Steps in FIR filter design}
+\begin{enumerate}
+  \item Specify the frequency response $H_d\freq$ of the filter and obtain the corresponding impulse response $h_d(n)$
+  \item Choose a window function that meets the desired design specification and determine the length of the filter.
+  \item Calculate the filter impulse response using $h(n)=h_d(n)w(n)$
+\end{enumerate} 
 \subsection{FIR filter type choice}
 Not every FIR filter type fits on every filter. \\
 \begin{tabular}{|+c|^c|^c|^c|^c|}
