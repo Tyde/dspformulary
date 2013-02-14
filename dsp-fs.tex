@@ -31,7 +31,7 @@
 
 \title{Digital Signal Processing}
 \subtitle{Formulary}
-\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.5.3 - 14.02.2013}
+\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.6.0 - 14.02.2013}
 
 \maketitle
 \newpage
@@ -419,15 +419,15 @@ $\alpha_i$ has to be specified. Therefore a low-pass filter would have the follo
 \includegraphics[width=\textwidth]{images/filter_spec.png}
 
 \subsection{Ripple and Attenuation calculation}
-Given the pass-band attenuation $\text{ATT}_P$ and the stop-band attenuation $\text{ATT}_S$
+Given the pass-band attenuation   $\text{ATT}_P$ and the stop-band attenuation $\text{ATT}_S$ of an IIR filter
 \begin{subequations}
 \begin{align}
 \alpha_1&=1-10^{-\text{ATT}_P/20}\\
 \alpha_2&=10^{-\text{ATT}_S/20}
 \end{align}
-Given the pass-band ripple $\text{R}_P$ and the stop-band ripple $\text{R}_S$
+Given the pass-band ripple $\text{R}_P$ and the stop-band ripple $\text{R}_S$ of a FIR Filter 
 \begin{align}
-\alpha_1&=10^{\text{R}_P/20}-1 \\
+\alpha_1&=10^{\text{R}_P/20} \\
 \alpha_2&=10^{-\text{R}_S/20}
 \end{align}
 \end{subequations}
@@ -556,6 +556,7 @@ With the use of (\ref{geomconv})
 \text{where} \notag \\
 \Delta^N\freq &= \sum\limits_{n=0}^{N-1}e^{-j\omega n} = e ^{-j \omega \frac{N-1}{2}} \cdot \frac{\sin(\frac{\omega N}{2})}{\sin(\frac{\omega}{2})}
 \end{align}
+
 \end{subequations}
 Thus for a zero mean stationary process $X(n),\E\left[I_{XX}^{N}\freq\right]$ for $N\rightarrow\infty$
 \begin{subequations}
@@ -583,6 +584,14 @@ And estimate with:
 \hat{C}_{XX}^B\freq = \frac{1}{L}\sum\limits_{l=1}^{L} I_{XX}^M (e^{j\omega},l)
 \end{equation}
 {\bf The variance of Barlett's estimator decreases when L increases}
+
+\subsubsection{Mean and Variance of Barlett's method}
+\begin{subequations}
+\begin{align}
+\E\left[\hat{C}_{XX}^B\right]&=\frac{1}{L}\sum\limits_{l=1}^L \E\left[I_{XX}^M(e^{j\omega},l)\right] \approx \E \left[I_{XX}^M\freq\right]\\
+\Var\left[\hat{C}_{XX}^B\right]&=\frac{1}{L^2}\sum\limits_{l=1}^L \Var\left[I_{XX}^M(e^{j\omega},l)\right] \approx \frac{1}{L}\Var \left[I_{XX}^M\freq\right]
+\end{align}
+\end{subequations}
 \subsection{Welch's method}
 Welch's method is similar to Barlett's method but the data segments are multiplied by a window $w_M(n)$ of length
 $M$ and the segmens may overlap. With $X_l(n)=X(n+(l-1)\cdot D)$
@@ -597,11 +606,24 @@ Where $A$ is a factor to ge an asymptotic unbiased estimation, which can be foun
 \frac{1}{2\pi}\int\limits_{-\pi}^{\pi} \left| W_M(e^{j\lambda}) \right|^2 d\lambda = \sum\limits_{n=0}^{M-1}\left|w_M(n)\right|^2 =MA
 \end{equation}
 \end{subequations}
+
+\subsubsection{Mean of Welch's Estimator}
+\begin{subequations}
+\begin{align}
+\E\left[C_{WX,WX}^W\freq\right]&=\frac{1}{L}\sum\limits_{l=1}^L \E\left[I_{WX,WX}^M(e^{j\omega},l)\right] \approx \E\left[I_{WX,WX}^M(e^{j\omega},l)\right] \\
+\text{with} \notag \\
+\E\left[I_{WX,WX}^M\freq\right] &\approx X_{XX}\freq \quad \omega \neq 0 
+\end{align}
+\end{subequations}
 \subsection{Smoothing the Periodogram}
 With $\omega_k\neq\omega_l$, thus $X_N(e^{j\omega_k})$ and $X_N(e^{j\omega_l})$ are asymptotically independent and 
 $I_{XX}^N(e^{j\omega_k})$ and $I_{XX}^N(e^{j\omega_l})$ are also independent:
 \begin{equation}
 \hat{C}_{XX}^S\freq = \frac{1}{2m+1}\sum\limits_{k=-m}^m I_{XX}^N(e^{j2\pi(k(\omega)+k)/N})
+\end{equation}
+\subsubsection{Variance of the smoothed Periodogram}
+\begin{equation}
+\lim\limits_{N\rightarrow\infty} \Var\left[\hat{C}_{XX}^S\freq\right] = \frac{1}{2m+1} C_{XX}\freq^2
 \end{equation}
 
 
@@ -626,8 +648,14 @@ w_{2M-1}(-\kappa) &,\text{for } |\kappa|\leq M-1 ,\text{with } M\ll N\\
 \text{This has the following}&\text{ constraint for the window:} \notag\\
 W_{2M-1}\freq &\geq 0 \quad\quad \forall \omega
 \end{align}
-\end{subequations}
+
 The Blackman-Tukey estimator is unbiased for $N\rightarrow\infty$ and its variance tends to zero if the window function has finite energy.
+The Variance of the Blackman-Tuckey Method is defined by:
+\begin{equation}
+\Var\left[\hat{C}_{XX}^{BT}\right]\approx C_{XX}\freq^2 \frac{1}{N} \sum\limits_{\kappa=-M+1}^{M-1} w_{2M-1}(\kappa)^2
+\end{equation}
+
+\end{subequations}
 \section{Cross-Spectrum Estimation}
 \subsection{The Cross-Periodogram}
 For $X(0),\ldots ,X(N-1),Y(0),\ldots,Y(N-1)$ the objective is to estimate the cross-spectrum $C_{YX}\freq$ for $-\pi <\omega <\pi$
