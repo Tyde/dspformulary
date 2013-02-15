@@ -61,7 +61,8 @@ Because the filter is assumed to be ideal, its impulse response is given by:
 \begin{equation}
 	h_r(t)=\frac{\sin(\pi t/T)}{\pi t/T}
 \end{equation}
-where T is the sampling interval that should fulfil the Nyquist condition $\Omega_s > 2 \Omega_B$
+where T is the sampling interval that should fulfil the Nyquist condition $\Omega_s > 2 \Omega_B$\\
+Rules and correspondences can be found on the last page of the DSP-Script
 \subsection{Discrete-time Processing of Continous-Time Signals}
 To process a continous-time signal $x_c(t)$ with digital signal processing techniques, the following setup is used:\\
 \includegraphics[width=\textwidth]{images/dsp_setup.png}
@@ -90,7 +91,7 @@ b_n/a_n, &n=0,\ldots,N-1\\
 With $f_{SR}$ being the sample rate.
 \begin{align}
 \text{Filter Order}&=N-1\\
-\Delta\omega &= \frac{f_s-f_p}{f_SR} 2\pi\\
+\Delta\omega &= \frac{f_s-f_p}{f_{SR}} 2\pi\\
 \text{Delay} &=\frac{N-1}{2}
 \end{align}
 
