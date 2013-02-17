@@ -65,7 +65,7 @@ where T is the sampling interval that should fulfil the Nyquist condition $\Omeg
 Rules and correspondences can be found on the last page of the DSP-Script
 \subsection{Discrete-time Processing of Continous-Time Signals}
 To process a continous-time signal $x_c(t)$ with digital signal processing techniques, the following setup is used:\\
-\includegraphics[width=\textwidth]{images/dsp_setup.png}
+\includegraphics[width=\textwidth]{figures/dsp_setup.pdf}
 
 \chapter{Digital Filter Design}
 
@@ -233,11 +233,11 @@ w(n) &= \begin{cases}
 \end{subequations}
 \subsubsection{Properties of a rectangular Window}
 If the window-funciton is a rectangle, the frequency response of the filter has to be multiplied with the 
-fourier transform of the rectangle:
+Fourier transform of the rectangle:
 \begin{subequations}
 \begin{align}
 H\freq &= H_d\freq \circledast W\freq \\
-&= H_d\freq \circledast \left[e^{-j\omega \frac{N-1}{2} } \cdot \frac{\sin(\omega N /2)}{\omega /2}\right]
+&= H_d\freq \circledast \left[e^{-j\omega \frac{N-1}{2} } \cdot \frac{\sin(\omega N /2)}{\sin(\omega /2)}\right]
 \end{align}
 \end{subequations}
 This, if $H_d\freq$ should be closest to $H\freq$, $N$ has to go to infinity
@@ -245,7 +245,7 @@ This, if $H_d\freq$ should be closest to $H\freq$, $N$ has to go to infinity
 
 \subsubsection{Main and Sidelobes}
 With increasing $N$, the 'main-lobe' width increases. \\
-\includegraphics[width=\textwidth]{images/main_side_lobes.png}
+\includegraphics[width=\textwidth]{figures/main_side_lobes.pdf}
 
 \subsubsection{Peak approxomation error (PAE)}
 \begin{equation}
@@ -280,7 +280,7 @@ w(n)& = 0.42-0.5\cos\left(\frac{2\pi n}{N-1}\right)+0.08\cos\left(\frac{4\pi n}{
 \end{align}
 \end{subequations}
 These windows have different Properties: \\
-\includegraphics[width=\textwidth]{images/window_props.png}
+\includegraphics[width=\textwidth]{figures/window_props.pdf}
 
 
 \subsection{Kaiser Window Filter Design}
@@ -316,10 +316,9 @@ To optimize a windowed filter, one has to attempt to minimize the integrated squ
 Optimal filter design does not use the integrated square error but instead the maximum error, which occurs at the discontinuities of $H_d\freq$.
 This error gets distributed equally across the frequency band.
 Please use the script pages 33-36 for information about optimal filter design.
-,
 
 \section{Infinite Impulse Response (IIR) filter}
-IIR filters are systems, which follow the following Restrictions:\\
+IIR filters are systems, which follow the following restrictions:\\
 $h(n)$ is
   \begin{itemize}
   	\item real
@@ -367,8 +366,9 @@ With $\Omega_c$ being the $3\text{dB}$ cut-off frequency
 With the conditions $\left|H(j\Omega)\right|\geq 1-\alpha_1$ for $0\leq|\Omega|\leq\Omega_p$ and $\left|H(j\Omega)\right| \leq \alpha_2$ for $\Omega_s\leq|\Omega|$ 
 \begin{subequations}
 \begin{align}
-N&=\frac{\log\left(\frac{1}{\alpha_2^2}-1\right)-\log\left(\frac{1}{(1-\alpha_1)^2}-1\right)}{2(\log\left(\Omega_S\right)-\log\left(\Omega_P\right))}\\
-\Omega_c&=\sqrt[2N]{\frac{\Omega_S^{2N}}{1/\hat{\alpha}_2^2-1}}
+N& \geq \frac{\log\left(\frac{1}{(1-\alpha_1)^2}-1\right)-\log\left(\frac{1}{\alpha_2^2}-1\right)}{2(\log\left(\Omega_P\right)-\log\left(\Omega_S\right))}\\
+\Omega_c&=\sqrt[2N]{\frac{\Omega_S^{2N}}{1/\hat{\alpha}_2^2-1}}\\
+\Omega_c &= \frac{\Omega_P}{\sqrt[2N]{\frac{1}{(1-\alpha_1)^2}-1}}
 \end{align}
 
 \end{subequations}
@@ -396,7 +396,7 @@ with $s=\sigma + j\Omega$ follows:
 \subsubsection{Remarks on the bilinear transformation}
 \begin{itemize}
   \item The frequency deformation $\Omega=\frac{2}{T_d}\tan(\omega/2)$ comes to a deviation in the detailed shape of $H_c(j\Omega)$
-  \item The delay time is also modified: $\tau_d=\tau_c[1+((\omega_c T_d)/2)^2]$
+  \item The delay time is also modified: $\tau_d=\tau_c\left\{1+\frac{\omega_c T_d}{2}\right\}$
   \item The bilinear transformation has no aliasing problems.
   \item This transformation is the most used in practise
 \end{itemize}
@@ -436,7 +436,7 @@ Non-ideal Filters have one or more pass-bands($\omega_p$),
 transition-bands(between $\omega_p$ and $\omega_s$) and stop-bands($\omega_s$). 
 For the pass- and the stop- band, a tolerance
 $\alpha_i$ has to be specified. Therefore a low-pass filter would have the following specification:
-\includegraphics[width=\textwidth]{images/filter_spec.png}
+\includegraphics[width=\textwidth]{figures/filter_spec.png}
 
 \subsection{Ripple and Attenuation calculation}
 Given the pass-band attenuation   $\text{ATT}_P$ and the stop-band attenuation $\text{ATT}_S$ of an IIR filter
@@ -619,7 +619,7 @@ $M$ and the segmens may overlap. With $X_l(n)=X(n+(l-1)\cdot D)$
 \begin{align}
 \hat{C}_{XX}^W\freq &= \frac{1}{L}\sum\limits_{l=1}^L I_{WX,WX}^M (e^{j\omega},l) \\
 \text{and} \notag \\
-I_{WX,WX}^M(e^{j\omega},l)&= \frac{1}{MA}\left|\sum\limits_{n=0}^{M-1} w_M(n) \cdot X_l(n) e^^ {-j\omega n}\right|^2
+I_{WX,WX}^M(e^{j\omega},l)&= \frac{1}{MA}\left|\sum\limits_{n=0}^{M-1} w_M(n) \cdot X_l(n) e^ {-j\omega n}\right|^2
 \end{align}
 Where $A$ is a factor to ge an asymptotic unbiased estimation, which can be found using Parseval's theorem:
 \begin{equation}
@@ -630,16 +630,19 @@ Where $A$ is a factor to ge an asymptotic unbiased estimation, which can be foun
 \subsubsection{Mean of Welch's Estimator}
 \begin{subequations}
 \begin{align}
-\E\left[C_{WX,WX}^W\freq\right]&=\frac{1}{L}\sum\limits_{l=1}^L \E\left[I_{WX,WX}^M(e^{j\omega},l)\right] \approx \E\left[I_{WX,WX}^M(e^{j\omega},l)\right] \\
+\E\left[\hat{C}_{XX}^W\freq\right]&=\frac{1}{L}\sum\limits_{l=1}^L
+\E\left[I_{WX,WX}^M(e^{j\omega},l)\right] \approx
+\E\left[I_{WX,WX}^M(e^{j\omega})\right] \\
 \text{with} \notag \\
-\E\left[I_{WX,WX}^M\freq\right] &\approx X_{XX}\freq \quad \omega \neq 0 
+\E\left[I_{WX,WX}^M\freq\right] &\approx C_{XX}\freq \quad \omega \neq 0
 \end{align}
 \end{subequations}
 \subsection{Smoothing the Periodogram}
 With $\omega_k\neq\omega_l$, thus $X_N(e^{j\omega_k})$ and $X_N(e^{j\omega_l})$ are asymptotically independent and 
 $I_{XX}^N(e^{j\omega_k})$ and $I_{XX}^N(e^{j\omega_l})$ are also independent:
 \begin{equation}
-\hat{C}_{XX}^S\freq = \frac{1}{2m+1}\sum\limits_{k=-m}^m I_{XX}^N(e^{j2\pi(k(\omega)+k)/N})
+\hat{C}_{XX}^S\freq = \frac{1}{2m+1}\sum\limits_{k=-m}^m I_{XX}^N
+\left(e^{j2\pi(k(\omega)+k)/N}\right)
 \end{equation}
 \subsubsection{Variance of the smoothed Periodogram}
 \begin{equation}
@@ -689,8 +692,8 @@ For different Segments $l=1,\ldots,L$ with length $M$
 \begin{align}
 \hat{C}_{YX}^B\freq &= \frac{1}{L}\sum\limits_{l=1}^L \frac{1}{M} Y_M(e^{j\omega},l)X_M(e^{j\omega},l)^{*} \\
 \text{with}\notag \\
-Y_N(e^{j\omega},l) &= \sum\limits_{n=0}^{M-1} Y(n-(l-1)M)e^{j\omega n}\\
-X_N(e^{j\omega},l) &= \sum\limits_{n=0}^{M-1} X(n-(l-1)M)e^{j\omega n}
+Y_N(e^{j\omega},l) &= \sum\limits_{n=0}^{M-1} Y(n-(l-1)M)e^{-j\omega n}\\
+X_N(e^{j\omega},l) &= \sum\limits_{n=0}^{M-1} X(n-(l-1)M)e^{-j\omega n}
 \end{align}
 Now for $N\rightarrow\infty$ the bias is $C_{YX}\freq$ and the variace is $\frac{1}{L}C_{YY}\freq C_{XX}\freq$
 \end{subequations}
@@ -699,7 +702,7 @@ Now for $N\rightarrow\infty$ the bias is $C_{YX}\freq$ and the variace is $\frac
 \section{Auto-regressive (AR) Processes}
 With 
 \begin{equation}
-C_XX\freq = \frac{\sigma_Z^2}{\left|1+\sum_{k=1}^p a_k e^{-k\omega k} \right|^2}
+C_{XX}\freq = \frac{\sigma_Z^2}{\left|1+\sum_{k=1}^p a_k e^{-j\omega k} \right|^2}
 \end{equation}
 The objective is to estimate the parameter $a_1,\ldots,a_p$ which will be used to estimate the spectrum $C_{XX}\freq$
 \subsection{Yule-Walker Equations}
@@ -739,10 +742,10 @@ C_{XX} &= B\freq B(e^{-j\omega})
 \end{align}
 \subsection{Solving} \label{solv}
 \begin{enumerate}
-  \item substitue $e^{j\omega}$
+  \item substitute $e^{j\omega}$
   \item Calculate $P(z)=z^qC_{XX}(z)$
   \item Assign all roots $z_i$ of $P(z)$ inside the unit circle to $B(z)$ \\
-  		$B(z)=b(0)\prod_{i=1}^q(1-z_iz^-1)$ with $b(0)>0$ and $|z_i|\leq 1$
+  		$B(z)=b(0)\prod_{i=1}^q(1-z_iz^{-1})$ with $b(0)>0$ and $|z_i|\leq 1$
   \item Calculate $h(m)=b(m)/b(0)$ for $m=1,\ldots,q$\\ 
 		With $b(0)^2=\sigma_Z^2=\frac{c_{XX}(0)}{1+\sum_{m=1}^q h(m)^2}$ and replacing $c_{XX}(l)$ with $\hat{c}_{XX}(l)$ 
 \end{enumerate}
@@ -754,12 +757,12 @@ The Spectrum can be obtained by the relationship
 \section{Auto-regressive Moving Average (ARMA) Process}
 The difference equation of an ARMA process, called $ARMA(p,q)$, is given by
 \begin{equation}
-X(n)+\sum\limits_{k=1}^p a_kX(n-k) = Z(n)+\sum\limits_{k=1}^q b_kz(n-k)
+X(n)+\sum\limits_{k=1}^p a_kX(n-k) = Z(n)+\sum\limits_{k=1}^q b_k Z(n-k)
 \end{equation}
 The modified Yule-Walker equations can be found:
 \begin{equation}
 c_{XX}(l)+\sum\limits_{k=1}^p a_k c_{XX}(l-k) = \begin{cases}
-\sigma_Z^2\sum_k=l^q b_kh(k-l) &,l=0,\ldots,q\\\
+\sigma_Z^2\sum_{k=l}^q b_kh(k-l) &,l=0,\ldots,q\\
 0&,l>q
 \end{cases}
 \end{equation}
@@ -768,11 +771,11 @@ To solve for $a_1,\ldots,a_p$, the equations can be employed with $l=q+1,\ldots,
 \section{Model order selection}
 \subsection{Akaine's Information Criterion (AIC)}
 \begin{equation}
-\text{AIC}(m)=\log \sigma_{Z,m}^2 + m\frac{2}{N} \quad m=1,\ldots,M
+\text{AIC}(m)=\log \hat{\sigma}_{Z,m}^2 + m\frac{2}{N} \quad m=1,\ldots,M
 \end{equation}
 \subsection{Minimum Description Length (MDL)}
 \begin{equation}
-\text{MDL}(m)=\log \sigma_{Z,m}^2 + m\frac{\log N}{N} \quad m=1,\ldots,M
+\text{MDL}(m)=\log \hat{\sigma}_{Z,m}^2 + m\frac{\log N}{N} \quad m=1,\ldots,M
 \end{equation}
 \chapter{Miscellaneous}
 \section{Useful mathematical equations}
