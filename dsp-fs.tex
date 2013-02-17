@@ -91,6 +91,7 @@ b_n/a_n, &n=0,\ldots,N-1\\
 With $f_{SR}$ being the sample rate.
 The filter order has to fit to the requirement of the filter type for N (odd or even)
 \begin{align}
+\text{Filter Order}&=N-1
 \Delta\omega &= \frac{f_s-f_p}{f_{SR}} 2\pi\\
 \text{Delay} &=\frac{N-1}{2}
 \end{align}
@@ -436,7 +437,7 @@ Non-ideal Filters have one or more pass-bands($\omega_p$),
 transition-bands(between $\omega_p$ and $\omega_s$) and stop-bands($\omega_s$). 
 For the pass- and the stop- band, a tolerance
 $\alpha_i$ has to be specified. Therefore a low-pass filter would have the following specification:
-\includegraphics[width=\textwidth]{figures/filter_spec.png}
+\includegraphics[width=\textwidth]{figures/filter_spec.pdf}
 
 \subsection{Ripple and Attenuation calculation}
 Given the pass-band attenuation   $\text{ATT}_P$ and the stop-band attenuation $\text{ATT}_S$ of an IIR filter
