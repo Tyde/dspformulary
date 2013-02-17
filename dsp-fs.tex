@@ -31,7 +31,7 @@
 
 \title{Digital Signal Processing}
 \subtitle{Formulary}
-\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.7.1 - 17.02.2013}
+\subsubtitle{Author: Daniel Thiem - studium@daniel-thiem.de\\Version 0.7.3 - 17.02.2013}
 
 \maketitle
 \newpage
@@ -368,7 +368,7 @@ With the conditions $\left|H(j\Omega)\right|\geq 1-\alpha_1$ for $0\leq|\Omega|\
 \begin{subequations}
 \begin{align}
 N& \geq \frac{\log\left(\frac{1}{(1-\alpha_1)^2}-1\right)-\log\left(\frac{1}{\alpha_2^2}-1\right)}{2(\log\left(\Omega_P\right)-\log\left(\Omega_S\right))}\\
-\Omega_c&=\sqrt[2N]{\frac{\Omega_S^{2N}}{1/\hat{\alpha}_2^2-1}}\\
+\Omega_c&=\frac{\Omega_S}{\sqrt[2N]{\frac{1}{\alpha_2^2}-1}}\\
 \Omega_c &= \frac{\Omega_P}{\sqrt[2N]{\frac{1}{(1-\alpha_1)^2}-1}}
 \end{align}
 
